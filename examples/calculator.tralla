@@ -1,0 +1,20 @@
+// calculator.tralla
+// This example demonstrates basic arithmetic operations and variable usage.
+
+let num1 = 10;
+let num2 = 5;
+
+let sum = num1 + num2;
+print("Sum:", sum); // Expected: Sum: 15
+
+let difference = num1 - num2;
+print("Difference:", difference); // Expected: Difference: 5
+
+let product = num1 * num2;
+print("Product:", product); // Expected: Product: 50
+
+let quotient = num1 / num2;
+print("Quotient:", quotient); // Expected: Quotient: 2
+
+let result = (num1 + num2) * (num1 - num2) / num2;
+print("Complex Calculation:", result); // Expected: Complex Calculation: 15

@@ -1,0 +1,35 @@
+// fibonacci.tralla
+// This example calculates the nth Fibonacci number using a loop and a function.
+
+func fibonacci(n) {
+    if n <= 0 {
+        return 0;
+    }
+    if n == 1 {
+        return 1;
+    }
+
+    let a = 0;
+    let b = 1;
+    let i = 2;
+
+    while i <= n {
+        let temp = b;
+        b = a + b;
+        a = temp;
+        i = i + 1;
+    }
+    return b;
+}
+
+let num = 10;
+let result = fibonacci(num);
+print("The", num, "th Fibonacci number is:", result); // Expected: The 10th Fibonacci number is: 55
+
+num = 0;
+result = fibonacci(num);
+print("The", num, "th Fibonacci number is:", result); // Expected: The 0th Fibonacci number is: 0
+
+num = 1;
+result = fibonacci(num);
+print("The", num, "th Fibonacci number is:", result); // Expected: The 1th Fibonacci number is: 1
