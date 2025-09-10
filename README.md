@@ -1,10 +1,10 @@
-# Trallalelo Lang
+# Tralalero Lang
 
-Benvenuto! Welcome to Trallalelo Lang, the most whimsical and brain-tickling programming language inspired by the finest Italian-flavored brainrot.
+Benvenuto! Welcome to Tralalero Lang, the most whimsical and brain-tickling programming language inspired by the finest Italian-flavored brainrot.
 
 ## Getting Started
 
-To run a Trallalelo program, you need to have Rust installed. Then, you can use the following command:
+To run a Tralalero program, you need to have Rust installed. Then, you can use the following command:
 
 ```bash
 cargo run -- <file_name>.tralla
@@ -12,7 +12,7 @@ cargo run -- <file_name>.tralla
 
 ## Syntax
 
-A Trallalelo program must start with `Tralalero Tralala` and end with `Bombardiro Crocodilo`.
+A Tralalero program must start with `Tralalero Tralala` and end with `Bombardiro Crocodilo`.
 
 ## Keywords
 
@@ -37,7 +37,7 @@ This command declares a variable and assigns a value to it. The value can be a s
 This command creates a loop that repeats a block of code a specified number of times. The block of code must be enclosed in `{` and `}` on separate lines.
 
 Example:
-```trallalelo
+```tralalero
 Pinguino Arrabiato Fruti 3
 {
   Matteeeo "Hello"
