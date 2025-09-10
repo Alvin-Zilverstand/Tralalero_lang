@@ -44,4 +44,16 @@ Pinguino Arrabiato Fruti 3
 }
 ```
 
+### `Chimpanzini <variable_name> <operand1> <operator> <operand2>`
+
+This command performs an arithmetic operation and stores the result in a variable. The supported operators are `+`, `-`, `*`, `/`.
+
+Example:
+```tralalero
+Biscottini x 10
+Biscottini y 5
+Chimpanzini result x + y
+Matteeeo result // prints 15
+```
+
 ## Ciao!

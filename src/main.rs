@@ -32,6 +32,16 @@ fn main() {
     }
 }
 
+fn get_value(s: &str, variables: &HashMap<String, String>) -> Option<f64> {
+    if let Ok(num) = s.parse::<f64>() {
+        Some(num)
+    } else if let Some(val_str) = variables.get(s) {
+        val_str.parse::<f64>().ok()
+    } else {
+        None
+    }
+}
+
 fn parse_and_execute(pc: usize, lines: &Vec<&str>, variables: &mut HashMap<String, String>) -> usize {
     let line = lines[pc].trim();
     let mut words = line.split_whitespace();
@@ -84,6 +94,20 @@ fn parse_and_execute(pc: usize, lines: &Vec<&str>, variables: &mut HashMap<Strin
                     }
                 }
             }
+        } else if keyword == "Chimpanzini" {
+            if let (Some(var_name), Some(op1_str), Some(op), Some(op2_str)) = (words.next(), words.next(), words.next(), words.next()) {
+                if let (Some(op1), Some(op2)) = (get_value(op1_str, variables), get_value(op2_str, variables)) {
+                    let result = match op {
+                        "+" => op1 + op2,
+                        "-" => op1 - op2,
+                        "*" => op1 * op2,
+                        "/" => op1 / op2,
+                        _ => 0.0,
+                    };
+                    variables.insert(var_name.to_string(), result.to_string());
+                }
+            }
+            return pc + 1;
         }
     }
     pc + 1
