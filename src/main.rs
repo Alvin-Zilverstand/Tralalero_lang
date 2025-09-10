@@ -25,30 +25,66 @@ fn main() {
     }
 
     let mut variables: HashMap<String, String> = HashMap::new();
+    let mut pc = 1; // Program counter starts after "Tralalero Tralala"
 
-    for line in lines.iter().skip(1).rev().skip(1).rev() {
-        parse_and_execute(line, &mut variables);
+    while pc < lines.len() - 1 {
+        pc = parse_and_execute(pc, &lines, &mut variables);
     }
 }
 
-fn parse_and_execute(line: &str, variables: &mut HashMap<String, String>) {
+fn parse_and_execute(pc: usize, lines: &Vec<&str>, variables: &mut HashMap<String, String>) -> usize {
+    let line = lines[pc].trim();
     let mut words = line.split_whitespace();
+
     if let Some(keyword) = words.next() {
         if keyword == "Biscottini" {
             if let Some(var_name) = words.next() {
                 let value = words.collect::<Vec<&str>>().join(" ");
                 variables.insert(var_name.to_string(), value.trim_matches('"').to_string());
             }
+            return pc + 1;
         } else if keyword == "Matteeeo" {
-            if let Some(expression) = words.next() {
-                if expression.starts_with('"') && expression.ends_with('"') {
-                    println!("{}", expression.trim_matches('"'));
-                } else {
-                    if let Some(value) = variables.get(expression) {
-                        println!("{}", value);
+            let expression = words.collect::<Vec<&str>>().join(" ");
+            if expression.starts_with('"') && expression.ends_with('"') {
+                println!("{}", expression.trim_matches('"'));
+            } else {
+                if let Some(value) = variables.get(&expression) {
+                    println!("{}", value);
+                }
+            }
+            return pc + 1;
+        } else if keyword == "Pinguino" {
+            if let (Some(word2), Some(word3), Some(times_str)) = (words.next(), words.next(), words.next()) {
+                if word2 == "Arrabiato" && word3 == "Fruti" {
+                    if let Ok(times) = times_str.parse::<i32>() {
+                        let loop_start = pc + 2; // After "Pinguino..." and "{"
+                        let mut loop_end = loop_start;
+                        let mut brace_count = 1;
+
+                        for i in loop_start..lines.len() {
+                            if lines[i].trim() == "{" {
+                                brace_count += 1;
+                            }
+                            if lines[i].trim() == "}" {
+                                brace_count -= 1;
+                                if brace_count == 0 {
+                                    loop_end = i;
+                                    break;
+                                }
+                            }
+                        }
+
+                        for _ in 0..times {
+                            let mut inner_pc = loop_start;
+                            while inner_pc < loop_end {
+                                inner_pc = parse_and_execute(inner_pc, lines, variables);
+                            }
+                        }
+                        return loop_end + 1;
                     }
                 }
             }
         }
     }
+    pc + 1
 }

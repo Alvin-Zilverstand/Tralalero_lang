@@ -32,4 +32,16 @@ This command prints a value to the console. The value can be a string literal (e
 
 This command declares a variable and assigns a value to it. The value can be a string literal or a number.
 
+### `Pinguino Arrabiato Fruti <number>`
+
+This command creates a loop that repeats a block of code a specified number of times. The block of code must be enclosed in `{` and `}` on separate lines.
+
+Example:
+```trallalelo
+Pinguino Arrabiato Fruti 3
+{
+  Matteeeo "Hello"
+}
+```
+
 ## Ciao!
