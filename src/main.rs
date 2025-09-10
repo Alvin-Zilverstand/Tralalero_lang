@@ -1,5 +1,6 @@
 use std::env;
 use std::fs;
+use std::collections::HashMap;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -23,20 +24,31 @@ fn main() {
         return;
     }
 
+    let mut variables: HashMap<String, String> = HashMap::new();
+
     for line in lines.iter().skip(1).rev().skip(1).rev() {
-        parse_and_execute(line);
+        parse_and_execute(line, &mut variables);
     }
 }
 
-fn parse_and_execute(line: &str) {
-    if line.starts_with("Matteeeo bambini gusini") {
-        let parts: Vec<&str> = line.splitn(2, ' ').collect();
-        if parts.len() > 1 {
-            let string_to_print = parts[1]
-                .trim_start_matches("bambini gusini")
-                .trim()
-                .trim_matches('"');
-            println!("{}", string_to_print);
+fn parse_and_execute(line: &str, variables: &mut HashMap<String, String>) {
+    let mut words = line.split_whitespace();
+    if let Some(keyword) = words.next() {
+        if keyword == "Biscottini" {
+            if let Some(var_name) = words.next() {
+                let value = words.collect::<Vec<&str>>().join(" ");
+                variables.insert(var_name.to_string(), value.trim_matches('"').to_string());
+            }
+        } else if keyword == "Matteeeo" {
+            if let Some(expression) = words.next() {
+                if expression.starts_with('"') && expression.ends_with('"') {
+                    println!("{}", expression.trim_matches('"'));
+                } else {
+                    if let Some(value) = variables.get(expression) {
+                        println!("{}", value);
+                    }
+                }
+            }
         }
     }
 }

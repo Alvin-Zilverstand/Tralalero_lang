@@ -24,8 +24,12 @@ This is the entry point of the program. It must be the first line of your code.
 
 This is the exit point of the program. It must be the last line of your code.
 
-### `Matteeeo bambini gusini "<message>"`
+### `Matteeeo <value>`
 
-This command prints a message to the console. The message must be enclosed in double quotes.
+This command prints a value to the console. The value can be a string literal (enclosed in double quotes) or a variable.
+
+### `Biscottini <variable_name> <value>`
+
+This command declares a variable and assigns a value to it. The value can be a string literal or a number.
 
 ## Ciao!
