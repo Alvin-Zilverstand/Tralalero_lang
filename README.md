@@ -56,4 +56,17 @@ Chimpanzini result x + y
 Matteeeo result // prints 15
 ```
 
+### `Tung Tung Tung <operand1> <operator> <operand2>`
+
+This command executes a block of code if a condition is true. The supported operators are `==`, `!=`, `>`, `<`, `>=`, `<=`.
+
+Example:
+```tralalero
+Biscottini x 10
+Tung Tung Tung x > 5
+{
+  Matteeeo "x is greater than 5"
+}
+```
+
 ## Ciao!

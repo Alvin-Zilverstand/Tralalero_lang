@@ -108,6 +108,47 @@ fn parse_and_execute(pc: usize, lines: &Vec<&str>, variables: &mut HashMap<Strin
                 }
             }
             return pc + 1;
+        } else if keyword == "Tung" {
+            if let (Some(word2), Some(word3), Some(op1_str), Some(op), Some(op2_str)) = (words.next(), words.next(), words.next(), words.next(), words.next()) {
+                if word2 == "Tung" && word3 == "Tung" {
+                    if let (Some(op1), Some(op2)) = (get_value(op1_str, variables), get_value(op2_str, variables)) {
+                        let condition = match op {
+                            "==" => op1 == op2,
+                            "!=" => op1 != op2,
+                            ">" => op1 > op2,
+                            "<" => op1 < op2,
+                            ">=" => op1 >= op2,
+                            "<=" => op1 <= op2,
+                            _ => false,
+                        };
+
+                        let block_start = pc + 2;
+                        let mut block_end = block_start;
+                        let mut brace_count = 1;
+
+                        for i in block_start..lines.len() {
+                            if lines[i].trim() == "{" {
+                                brace_count += 1;
+                            }
+                            if lines[i].trim() == "}" {
+                                brace_count -= 1;
+                                if brace_count == 0 {
+                                    block_end = i;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if condition {
+                            let mut inner_pc = block_start;
+                            while inner_pc < block_end {
+                                inner_pc = parse_and_execute(inner_pc, lines, variables);
+                            }
+                        }
+                        return block_end + 1;
+                    }
+                }
+            }
         }
     }
     pc + 1
