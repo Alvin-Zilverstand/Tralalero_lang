@@ -1,0 +1,16 @@
+// string_manipulation.tralla
+// This example demonstrates string concatenation.
+
+let greeting = "Hello";
+let name = "World";
+
+Unire Corde full_greeting greeting name;
+print("Concatenated string:", full_greeting); // Expected: Concatenated string: HelloWorld
+
+Unire Corde message "This is a " "test.";
+print("Another concatenated string:", message); // Expected: Another concatenated string: This is a test.
+
+let space = " ";
+Unire Corde spaced_greeting greeting space;
+Unire Corde final_greeting spaced_greeting name;
+print("Concatenated with space:", final_greeting); // Expected: Concatenated with space: Hello World
