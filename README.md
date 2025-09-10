@@ -60,12 +60,18 @@ Matteeeo result // prints 15
 
 This command executes a block of code if a condition is true. The supported operators are `==`, `!=`, `>`, `<`, `>=`, `<=`.
 
+This can be followed by a `Ballerina Cappuccina` block to execute code if the condition is false.
+
 Example:
 ```tralalero
-Biscottini x 10
-Tung Tung Tung x > 5
+Biscottini x 5
+Tung Tung Tung x > 10
 {
-  Matteeeo "x is greater than 5"
+  Matteeeo "x is greater than 10"
+}
+Ballerina Cappuccina
+{
+  Matteeeo "x is not greater than 10"
 }
 ```
 

@@ -122,30 +122,63 @@ fn parse_and_execute(pc: usize, lines: &Vec<&str>, variables: &mut HashMap<Strin
                             _ => false,
                         };
 
-                        let block_start = pc + 2;
-                        let mut block_end = block_start;
+                        let if_block_start = pc + 2;
+                        let mut if_block_end = if_block_start;
                         let mut brace_count = 1;
 
-                        for i in block_start..lines.len() {
+                        for i in if_block_start..lines.len() {
                             if lines[i].trim() == "{" {
                                 brace_count += 1;
                             }
                             if lines[i].trim() == "}" {
                                 brace_count -= 1;
                                 if brace_count == 0 {
-                                    block_end = i;
+                                    if_block_end = i;
                                     break;
                                 }
                             }
                         }
 
+                        let mut next_pc = if_block_end + 1;
+
                         if condition {
-                            let mut inner_pc = block_start;
-                            while inner_pc < block_end {
+                            let mut inner_pc = if_block_start;
+                            while inner_pc < if_block_end {
                                 inner_pc = parse_and_execute(inner_pc, lines, variables);
                             }
+                        } else {
+                            // Check for an else block
+                            if let Some(next_line) = lines.get(if_block_end + 1) {
+                                let mut next_words = next_line.trim().split_whitespace();
+                                if let Some(else_keyword) = next_words.next() {
+                                    if else_keyword == "Ballerina" && next_words.next() == Some("Cappuccina") {
+                                        let else_block_start = if_block_end + 3;
+                                        let mut else_block_end = else_block_start;
+                                        let mut brace_count = 1;
+
+                                        for i in else_block_start..lines.len() {
+                                            if lines[i].trim() == "{" {
+                                                brace_count += 1;
+                                            }
+                                            if lines[i].trim() == "}" {
+                                                brace_count -= 1;
+                                                if brace_count == 0 {
+                                                    else_block_end = i;
+                                                    break;
+                                                }
+                                            }
+                                        }
+
+                                        let mut inner_pc = else_block_start;
+                                        while inner_pc < else_block_end {
+                                            inner_pc = parse_and_execute(inner_pc, lines, variables);
+                                        }
+                                        next_pc = else_block_end + 1;
+                                    }
+                                }
+                            }
                         }
-                        return block_end + 1;
+                        return next_pc;
                     }
                 }
             }
