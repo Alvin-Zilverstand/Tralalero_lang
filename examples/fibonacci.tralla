@@ -1,3 +1,4 @@
+Tralalero Tralala
 // fibonacci.tralla
 // This example calculates the nth Fibonacci number using a loop and a function.
 
@@ -24,12 +25,22 @@ func fibonacci(n) {
 
 let num = 10;
 let result = fibonacci(num);
-print("The", num, "th Fibonacci number is:", result); // Expected: The 10th Fibonacci number is: 55
+Matteeeo "The" // Expected: The 10th Fibonacci number is: 55
+Matteeeo num
+Matteeeo "th Fibonacci number is:"
+Matteeeo result
 
 num = 0;
 result = fibonacci(num);
-print("The", num, "th Fibonacci number is:", result); // Expected: The 0th Fibonacci number is: 0
+Matteeeo "The" // Expected: The 0th Fibonacci number is: 0
+Matteeeo num
+Matteeeo "th Fibonacci number is:"
+Matteeeo result
 
 num = 1;
 result = fibonacci(num);
-print("The", num, "th Fibonacci number is:", result); // Expected: The 1th Fibonacci number is: 1
+Matteeeo "The" // Expected: The 1th Fibonacci number is: 1
+Matteeeo num
+Matteeeo "th Fibonacci number is:"
+Matteeeo result
+Bombardiro Crocodilo

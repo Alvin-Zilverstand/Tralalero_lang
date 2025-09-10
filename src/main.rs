@@ -105,40 +105,65 @@ fn get_value(s: &str, variables: &HashMap<String, String>) -> Option<f64> {
 }
 
 fn parse_and_execute(pc: usize, lines: &Vec<&str>, variables: &mut HashMap<String, String>, functions: &HashMap<String, Function>) -> usize {
-    let line = lines[pc].trim();
+    let mut line = lines[pc].trim().to_string();
+    // Remove comments
+    if let Some(comment_start) = line.find("//") {
+        line = line[..comment_start].to_string();
+    }
     let mut words = line.split_whitespace();
 
     if let Some(keyword) = words.next() {
-        if keyword == "Lirili" { // Skip function definitions
-            let mut brace_count = 1;
-            let mut end_pc = pc + 2;
-            for i in (pc + 2)..lines.len() {
-                if lines[i].trim() == "{" {
-                    brace_count += 1;
-                }
-                if lines[i].trim() == "}" {
-                    brace_count -= 1;
-                    if brace_count == 0 {
-                        end_pc = i;
-                        break;
+        if keyword == "let" { // Handle 'let' keyword for variable declarations
+            if let Some(var_name) = words.next() {
+                if let Some(eq_sign) = words.next() {
+                    if eq_sign == "=" {
+                        let mut expression = words.collect::<Vec<&str>>().join(" ");
+                        expression = expression.trim_end_matches(';').to_string();
+                        
+                        // Try to parse as arithmetic expression (op1 op op2)
+                        let expr_parts = expression.split_whitespace().collect::<Vec<&str>>();
+                        if expr_parts.len() == 3 {
+                            let op1_str = expr_parts[0];
+                            let op = expr_parts[1];
+                            let op2_str = expr_parts[2];
+
+                            if let (Some(op1), Some(op2)) = (get_value(op1_str, variables), get_value(op2_str, variables)) {
+                                let result = match op {
+                                    "+" => op1 + op2,
+                                    "-" => op1 - op2,
+                                    "*" => op1 * op2,
+                                    "/" => op1 / op2,
+                                    _ => {
+                                        // Not a recognized operator, treat as direct value
+                                        variables.insert(var_name.to_string(), expression.trim_matches('"').to_string());
+                                        return pc + 1;
+                                    }
+                                };
+                                variables.insert(var_name.to_string(), result.to_string());
+                            } else {
+                                // Could not get numeric values for operands, treat as direct value
+                                variables.insert(var_name.to_string(), expression.trim_matches('"').to_string());
+                            }
+                        } else {
+                            // Not an arithmetic expression, treat as direct value
+                            variables.insert(var_name.to_string(), expression.trim_matches('"').to_string());
+                        }
                     }
                 }
             }
-            return end_pc + 1;
-        }
-        if keyword == "Biscottini" {
-            if let Some(var_name) = words.next() {
-                let value = words.collect::<Vec<&str>>().join(" ");
-                variables.insert(var_name.to_string(), value.trim_matches('"').to_string());
-            }
             return pc + 1;
         } else if keyword == "Matteeeo" {
-            let expression = words.collect::<Vec<&str>>().join(" ");
+            let mut expression = words.collect::<Vec<&str>>().join(" ");
+            expression = expression.trim_end_matches(';').to_string();
             if expression.starts_with('"') && expression.ends_with('"') {
-                println!("{}", expression.trim_matches('"'));
+                let printed_value = expression.trim_matches('"');
+                println!("{}", printed_value);
             } else {
                 if let Some(value) = variables.get(&expression) {
                     println!("{}", value);
+                } else {
+                    // Variable not found, print the expression as is (might be an error or a literal not enclosed in quotes)
+                    println!("{}", expression);
                 }
             }
             return pc + 1;
@@ -173,20 +198,6 @@ fn parse_and_execute(pc: usize, lines: &Vec<&str>, variables: &mut HashMap<Strin
                     }
                 }
             }
-        } else if keyword == "Chimpanzini" {
-            if let (Some(var_name), Some(op1_str), Some(op), Some(op2_str)) = (words.next(), words.next(), words.next(), words.next()) {
-                if let (Some(op1), Some(op2)) = (get_value(op1_str, variables), get_value(op2_str, variables)) {
-                    let result = match op {
-                        "+" => op1 + op2,
-                        "-" => op1 - op2,
-                        "*" => op1 * op2,
-                        "/" => op1 / op2,
-                        _ => 0.0,
-                    };
-                    variables.insert(var_name.to_string(), result.to_string());
-                }
-            }
-            return pc + 1;
         } else if keyword == "Tung" {
             if let (Some(word2), Some(word3), Some(op1_str), Some(op), Some(op2_str)) = (words.next(), words.next(), words.next(), words.next(), words.next()) {
                 if word2 == "Tung" && word3 == "Tung" {
@@ -262,8 +273,10 @@ fn parse_and_execute(pc: usize, lines: &Vec<&str>, variables: &mut HashMap<Strin
                 }
             }
         } else if keyword == "Unire" { // New: String Concatenation
-            if let (Some(word2), Some(result_var), Some(str1_val), Some(str2_val)) = (words.next(), words.next(), words.next(), words.next()) {
+            if let (Some(word2), Some(result_var), Some(str1_raw), Some(str2_raw)) = (words.next(), words.next(), words.next(), words.next()) {
                 if word2 == "Corde" {
+                    let str1_val = str1_raw.trim_end_matches(';');
+                    let str2_val = str2_raw.trim_end_matches(';');
                     let s1 = if str1_val.starts_with('"') && str1_val.ends_with('"') {
                         str1_val.trim_matches('"').to_string()
                     } else if let Some(val) = variables.get(str1_val) {

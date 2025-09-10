@@ -1,4 +1,4 @@
 Tralalero Tralala
-Biscottini my_variable "Hello from a variable!"
-Matteeeo my_variable
+let my_variable = "Hello from a variable!";
+Matteeeo my_variable;
 Bombardiro Crocodilo

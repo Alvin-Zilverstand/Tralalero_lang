@@ -1,6 +1,6 @@
 Tralalero Tralala
-Biscottini x 10
-Biscottini y 5
-Chimpanzini result x + y
-Matteeeo result
+let x = 10;
+let y = 5;
+let result = x + y;
+Matteeeo result;
 Bombardiro Crocodilo
