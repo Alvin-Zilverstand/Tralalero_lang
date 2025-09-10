@@ -178,6 +178,37 @@ The `examples/` directory contains several `.tralla` files demonstrating various
 *   `fibonacci.tralla`: Demonstrates loops and function calls (note the return value limitation).
 *   `string_manipulation.tralla`: Shows string concatenation.
 
+## Implementation Details (For Developers)
+
+This section provides a brief overview of how the Tralalero_lang interpreter is structured and some of the design choices and challenges encountered during its development.
+
+### Interpreter Core
+
+The interpreter is implemented in `src/main.rs` as a single-pass, line-by-line parser and executor. It reads the `.tralla` file content, splits it into lines, and then processes each line sequentially.
+
+### Parsing Strategy
+
+*   **Line-by-Line Processing:** The interpreter reads and executes code one line at a time.
+*   **Comment Stripping:** Before processing, each line is checked for `//` (single-line comments), and any content after `//` is removed.
+*   **Whitespace Splitting:** Commands and arguments are primarily parsed by splitting the line by whitespace. This simplicity leads to some of the known limitations, particularly with string literals containing spaces.
+*   **Semicolon Trimming:** Trailing semicolons (`;`) are trimmed from expressions and variable names during parsing to ensure correct value retrieval and storage.
+
+### Variable Handling
+
+Variables are stored in a `HashMap<String, String>`, where the key is the variable name and the value is its string representation. Numeric values are converted to strings before storage and parsed back to `f64` when used in arithmetic operations or comparisons.
+
+### Arithmetic and Expression Evaluation
+
+*   **`let` Keyword:** The `let` keyword handles both direct variable assignments (e.g., `let x = 10;`) and simple binary arithmetic expressions (e.g., `let sum = a + b;`).
+*   **`get_value` Function:** This helper function attempts to parse a given string as an `f64` literal. If it fails, it checks if the string corresponds to a variable name and, if so, attempts to parse the variable's string value as an `f64`.
+*   **Limited Expression Parsing:** The current arithmetic parsing within `let` is limited to `operand operator operand`. More complex expressions require a more sophisticated parsing algorithm (e.g., shunting-yard or abstract syntax tree generation), which is not yet implemented.
+
+### Function Call Mechanism
+
+*   **Function Definition (`Lirili Larila`):** Functions are stored with their name, argument list, and the start/end program counter (PC) lines of their body.
+*   **Function Call (`Trippi Troppi`):** When a function is called, a new local scope (a cloned `HashMap` of variables) is created. Arguments are passed by value into this local scope. The interpreter then executes the lines within the function's body.
+*   **No Return Value Propagation:** A significant current limitation is that functions do not return values to the calling scope. Any `return` statements within a function only terminate its execution; the value is not captured or made available to the caller. This means functions primarily serve for side effects (e.g., printing).
+
 ## Development
 
 Tralalero_lang is an ongoing project. Contributions and suggestions are welcome!
